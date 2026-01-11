@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi Hacking App | Elite Access</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0a0e17;
+            --accent: #00ff88;
+            --accent-dark: #00cc6a;
+            --secondary: #1a1f2e;
+            --terminal: #0dff00;
+            --text: #e0e0e0;
+            --text-dim: #8a8a8a;
+            --danger: #ff0040;
+            --card-bg: rgba(15, 20, 30, 0.8);
+            --border: rgba(0, 255, 136, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Consolas', 'Monaco', monospace;
+        }
+
+        body {
+            background-color: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 136, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 64, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(0, 13, 255, 0.03) 0%, transparent 30%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(10, 14, 23, 0.9);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--terminal);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="0" y="60" font-family="monospace" font-size="14" fill="%2300ff88">01010101</text></svg>') repeat;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--accent), var(--terminal));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background-color: var(--danger);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: var(--primary);
+            padding: 18px 45px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .download-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .download-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+            z-index: -1;
+        }
+
+        .download-btn:hover:before {
+            left: 100%;
+        }
+
+        /* Steps Section */
+        .section {
+            padding: 100px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 70px;
+            color: var(--accent);
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 40px 30px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 5rem;
+            font-weight: 900;
+            color: rgba(0, 255, 136, 0.1);
+            line-height: 1;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-icon {
+            background-color: rgba(0, 255, 136, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+        }
+
+        .step-description {
+            color: var(--text-dim);
+        }
+
+        /* Screenshots */
+        .screenshots-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .screenshot {
+            width: 280px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .screenshot:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .screenshot img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .screenshot-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 255, 136, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .screenshot:hover .screenshot-overlay {
+            opacity: 1;
+        }
+
+        .screenshot-overlay i {
+            font-size: 3rem;
+            color: var(--primary);
+        }
+
+        /* Terminal */
+        .terminal-container {
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.95rem;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .terminal-title {
+            color: var(--terminal);
+            font-weight: 600;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .close { background-color: #ff5f56; }
+        .minimize { background-color: #ffbd2e; }
+        .maximize { background-color: #27ca3f; }
+
+        .terminal-line {
+            margin-bottom: 8px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .prompt {
+            color: var(--terminal);
+            margin-right: 10px;
+        }
+
+        .command {
+            color: white;
+        }
+
+        .output {
+            color: var(--text-dim);
+            margin-left: 20px;
+        }
+
+        .scanning {
+            color: #00ccff;
+        }
+
+        .success {
+            color: var(--accent);
+        }
+
+        .error {
+            color: var(--danger);
+        }
+
+        /* Progress */
+        .progress-container {
+            margin: 40px 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--secondary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--terminal));
+            width: 0%;
+            border-radius: 4px;
+            transition: width 1.5s ease-in-out;
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--accent);
+            position: relative;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-close:hover {
+            background-color: rgba(255, 0, 64, 0.8);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .steps {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-satellite-dish"></i>
+                <span>WiFi Hacking App</span>
+            </div>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#steps">Methodology</a></li>
+                    <li><a href="#screenshots">Interface</a></li>
+                    <li><a href="#features">Capabilities</a></li>
+                    <li><a href="#terminal">Live Demo</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-badge">ELITE EDITION</div>
+            <h1>ACCESS ANY NETWORK.<br>WITHOUT AUTHORIZATION.</h1>
+            <p class="hero-subtitle">The most advanced wireless penetration tool ever created for mobile devices. Used by cybersecurity professionals and government agencies worldwide.</p>
+            <a href="#download" class="download-btn">
+                <i class="fas fa-download"></i> DOWNLOAD NOW
+            </a>
+        </div>
+    </section>
+
+    <!-- Steps Section -->
+    <section class="section" id="steps">
+        <div class="container">
+            <h2 class="section-title">THREE STEPS TO DOMINANCE</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title"><span class="step-icon"><i class="fas fa-satellite"></i></span> DEPLOY</h3>
+                    <p class="step-description">Launch the application and activate the advanced scanning module. The system automatically detects all wireless networks within operational range, including hidden SSIDs.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title"><span class="step-icon"><i class="fas fa-crosshairs"></i></span> TARGET</h3>
+                    <p class="step-description">Select any network from the intelligence dashboard. The application analyzes security protocols, signal strength, and connected devices in real-time.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title"><span class="step-icon"><i class="fas fa-unlock-alt"></i></span> PENETRATE</h3>
+                    <p class="step-description">Execute the proprietary breach algorithm. Gain full network access with administrative privileges. No traces, no logs, complete anonymity guaranteed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section class="section" id="screenshots">
+        <div class="container">
+            <h2 class="section-title">OPERATIONAL INTERFACE</h2>
+            <div class="screenshots-container">
+                <div class="screenshot" onclick="openModal('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Network Scanning Interface">
+                    <div class="screenshot-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="screenshot" onclick="openModal('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Vulnerability Analysis">
+                    <div class="screenshot-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="screenshot" onclick="openModal('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Successful Penetration">
+                    <div class="screenshot-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terminal Section -->
+    <section class="section" id="terminal">
+        <div class="container">
+            <h2 class="section-title">LIVE OPERATIONS CONSOLE</h2>
+            
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span>Scanning Progress</span>
+                    <span id="progress-percentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+            
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <div class="terminal-title">root@wifi_hacker:~</div>
+                    <div class="terminal-controls">
+                        <div class="control close"></div>
+                        <div class="control minimize"></div>
+                        <div class="control maximize"></div>
+                    </div>
+                </div>
+                <div id="terminal-content">
+                    <!-- Terminal lines will be added by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <h2 class="section-title">UNMATCHED CAPABILITIES</h2>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="feature-title">INSTANT SCANNING</h3>
+                    <p>Detect every wireless network within range in milliseconds. No delays, no limitations.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">PROTOCOL BREACH</h3>
+                    <p>Overcome WPA2, WPA3, and enterprise-grade security with proprietary algorithms.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <h3 class="feature-title">COMPLETE ANONYMITY</h3>
+                    <p>Zero logs. Zero traces. Your operations remain undetectable and untraceable.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3 class="feature-title">ADVANCED ANALYTICS</h3>
+                    <p>Real-time network intelligence, connected device mapping, and bandwidth monitoring.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="section" id="download">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title">ACQUIRE THE TOOL</h2>
+            <p style="max-width: 700px; margin: 0 auto 50px; color: var(--text-dim); font-size: 1.1rem;">
+                Download the elite version with unlimited capabilities. Compatible with all modern mobile devices. Installation requires root access.
+            </p>
+            <a href="/WifiHacker.2.7.apk" class="download-btn" onclick="initiateDownload()">
+                <i class="fas fa-key"></i> UNLOCK FULL ACCESS
+            </a>
+            <p style="margin-top: 20px; color: var(--text-dim); font-size: 0.9rem;">
+                <i class="fas fa-exclamation-triangle"></i> For authorized penetration testing and educational purposes only.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">Terms of Use</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Contact</a>
+                <a href="#">Support</a>
+            </div>
+            <p>WiFi Hacking App © 2023. All rights reserved. This tool is intended for authorized security testing only.</p>
+        </div>
+    </footer>
+
+    <!-- Modal for screenshot zoom -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="Enlarged screenshot">
+        </div>
+    </div>
+
+    <script>
+        // Terminal simulation
+        const terminalLines = [
+            {prompt: "root@wifi_hacker:~#", command: "scan --all --stealth", output: "Initializing stealth scanning protocol...", delay: 500},
+            {prompt: "root@wifi_hacker:~#", command: "", output: "Detecting wireless networks in range...", delay: 800},
+            {prompt: "", command: "", output: "[+] 14 networks identified", class: "success", delay: 600},
+            {prompt: "", command: "", output: "  - HOME_NETWORK_5G (WPA2) [Strong Signal]", class: "scanning", delay: 400},
+            {prompt: "", command: "", output: "  - SECURE_CORP (WPA3-Enterprise) [Medium Signal]", class: "scanning", delay: 400},
+            {prompt: "", command: "", output: "  - XFINITY (WPA2) [Weak Signal]", class: "scanning", delay: 400},
+            {prompt: "", command: "", output: "  - Hidden_Network (WPA2) [Strong Signal]", class: "scanning", delay: 400},
+            {prompt: "root@wifi_hacker:~#", command: "target --ssid=SECURE_CORP --aggressive", output: "Target acquired. Analyzing security protocols...", delay: 1000},
+            {prompt: "", command: "", output: "[!] WPA3-Enterprise detected. Deploying advanced breach module...", class: "scanning", delay: 1200},
+            {prompt: "", command: "", output: "[+] Vulnerability identified: EAP-PEAP implementation flaw", class: "success", delay: 900},
+            {prompt: "", command: "", output: "Injecting forged authentication certificate...", class: "scanning", delay: 1100},
+            {prompt: "", command: "", output: "[SUCCESS] Security bypassed. Establishing connection...", class: "success", delay: 800},
+            {prompt: "root@wifi_hacker:~#", command: "access --full", output: "Connection established with administrative privileges.", delay: 700},
+            {prompt: "", command: "", output: "[+] Network access: FULL", class: "success", delay: 600},
+            {prompt: "", command: "", output: "[+] Bandwidth: 450 Mbps", class: "success", delay: 500},
+            {prompt: "", command: "", output: "[+] Connected devices: 17", class: "success", delay: 500},
+            {prompt: "root@wifi_hacker:~#", command: "", output: "Ready for further operations.", delay: 1000}
+        ];
+
+        const terminalContent = document.getElementById('terminal-content');
+        let lineIndex = 0;
+
+        function addTerminalLine() {
+            if (lineIndex >= terminalLines.length) return;
+            
+            const line = terminalLines[lineIndex];
+            const lineElement = document.createElement('div');
+            lineElement.className = 'terminal-line';
+            
+            if (line.prompt) {
+                const prompt = document.createElement('span');
+                prompt.className = 'prompt';
+                prompt.textContent = line.prompt;
+                lineElement.appendChild(prompt);
+            }
+            
+            if (line.command) {
+                const command = document.createElement('span');
+                command.className = 'command';
+                command.textContent = line.command;
+                lineElement.appendChild(command);
+            }
+            
+            if (line.output) {
+                const output = document.createElement('div');
+                output.className = `output ${line.class || ''}`;
+                output.textContent = line.output;
+                lineElement.appendChild(output);
+            }
+            
+            terminalContent.appendChild(lineElement);
+            terminalContent.scrollTop = terminalContent.scrollHeight;
+            
+            lineIndex++;
+            
+            if (lineIndex < terminalLines.length) {
+                setTimeout(addTerminalLine, line.delay);
+            }
+        }
+
+        // Progress bar animation
+        const progressFill = document.getElementById('progress-fill');
+        const progressPercentage = document.getElementById('progress-percentage');
+        let progress = 0;
+
+        function updateProgressBar() {
+            if (progress >= 100) {
+                progress = 0;
+                progressFill.style.width = '0%';
+                progressPercentage.textContent = '0%';
+            }
+            
+            progress += Math.random() * 8;
+            if (progress > 100) progress = 100;
+            
+            progressFill.style.width = progress + '%';
+            progressPercentage.textContent = Math.round(progress) + '%';
+            
+            setTimeout(updateProgressBar, 300);
+        }
+
+        // Modal functionality
+        function openModal(imageSrc) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Download simulation
+        function initiateDownload() {
+            const btn = document.querySelector('.download-btn');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-cog fa-spin"></i> PREPARING DOWNLOAD...';
+            btn.style.background = 'linear-gradient(135deg, #333, #555)';
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-lock"></i> VERIFYING ACCESS CREDENTIALS...';
+            }, 1500);
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-download"></i> DOWNLOAD INITIATED';
+                btn.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-dark))';
+                
+                // Simulate file download
+                setTimeout(() => {
+                    alert("Download complete. Install the APK file and launch the application.");
+                    btn.innerHTML = originalText;
+                }, 1000);
+            }, 3000);
+            
+            return false;
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Initialize everything when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            // Start terminal simulation after a short delay
+            setTimeout(addTerminalLine, 1000);
+            
+            // Start progress bar animation
+            setTimeout(updateProgressBar, 1500);
+            
+            // Mobile menu toggle
+            document.querySelector('.mobile-menu').addEventListener('click', () => {
+                document.querySelector('nav ul').style.display = 
+                    document.querySelector('nav ul').style.display === 'flex' ? 'none' : 'flex';
+            });
+            
+            // Close modal when clicking outside image
+            document.getElementById('imageModal').addEventListener('click', (e) => {
+                if (e.target.id === 'imageModal') {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
